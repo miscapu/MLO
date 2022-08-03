@@ -1,60 +1,18 @@
 <style>
     /**
+    * Escondendo option do select de categorias
+    */
+    .hide_options
+    {
+        display: none!important;
+    }
+
+    /**
     Ocultar media menu sidebar
      */
     div#uip-folder-app
     {
         display:none!important;
-    }
-
-
-
-    .drop-zone {
-        max-width: 200px;
-        height: 200px;
-        padding: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-family: "Quicksand", sans-serif;
-        font-weight: 500;
-        font-size: 20px;
-        cursor: pointer;
-        color: #cccccc;
-        border: 4px dashed #009578;
-        border-radius: 10px;
-    }
-
-    .drop-zone--over {
-        border-style: solid;
-    }
-
-    .drop-zone__input {
-        display: none;
-    }
-
-    .drop-zone__thumb {
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-        background-color: #cccccc;
-        background-size: cover;
-        position: relative;
-    }
-
-    .drop-zone__thumb::after {
-        content: attr(data-label);
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 5px 0;
-        color: #ffffff;
-        background: rgba(0, 0, 0, 0.75);
-        font-size: 14px;
-        text-align: center;
     }
 </style>
 
@@ -175,6 +133,41 @@
     .effect-21:focus ~ label, .has-content.effect-21 ~ label{top: -18px; left: 0; font-size: 12px; color: #3399FF; transition: 0.3s;}
 </style>
 <!-- Fim Effects Borders Inputs  -->
+
+
+
+<!--
+*
+* Campos Condicionais para diversas categorias
+* @author MiSCapu
+* @since 1.0
+*
+-->
+<style>
+    /*.show_if_electro_210*/
+    /*{*/
+    /*    display: block!important;*/
+    /*}*/
+    /*.hide_if_electro_210*/
+    /*{*/
+    /*    display:none!important;*/
+    /*}*/
+    select#product_cat > option.level-0
+    {
+        display: none!important;
+    }
+    option.level-0
+    {
+        display: none!important;
+    }
+
+</style>
+
+
+
+<!-- Fim Campos Condicionais -->
+
+
 
 
 
@@ -403,6 +396,104 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                              -->
                             <input type="hidden" name="dokan_product_id" id="dokan-edit-product-id" value="<?php echo esc_attr( $post_id ); ?>"/>
 
+
+
+
+                            <!-- Upload images Images -->
+                            <label for="post_title" class="form-label"><?php esc_html_e( 'Foto de seu Produto', 'dokan-lite' ); ?></label>
+                            <div tabindex="0" class="featured-image">
+
+                                <div class="dokan-feat-image-upload dokan-new-product-featured-img">
+                                    <?php
+                                    $wrap_class        = ' dokan-hide';
+                                    $instruction_class = '';
+                                    $feat_image_id     = 0;
+
+                                    if ( has_post_thumbnail( $post_id ) ) {
+                                        $wrap_class        = '';
+                                        $instruction_class = ' dokan-hide';
+                                        $feat_image_id     = get_post_thumbnail_id( $post_id );
+                                    }
+                                    ?>
+
+                                    <div class="instruction-inside<?php echo esc_attr( $instruction_class ); ?>">
+
+                                        <input type="hidden" name="feat_image_id" id="image_id" class="dokan-feat-image-id" value="<?php echo esc_attr( $feat_image_id ); ?>">
+
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <a href="#" class="dokan-feat-image-btn btn btn-sm"><?php esc_html_e( 'Upload a product cover image', 'dokan-lite' ); ?></a>
+                                    </div>
+
+                                    <div class="image-wrap<?php echo esc_attr( $wrap_class ); ?>">
+                                        <a class="close dokan-remove-feat-image" style="line-height: 35%!important;">&times;</a>
+                                        <?php if ( $feat_image_id ) { ?>
+                                            <?php echo get_the_post_thumbnail( $post_id, apply_filters( 'single_product_large_thumbnail_size', 'shop_single' ),
+                                                array(
+                                                    'height'    => '',
+                                                    'width'     => '',
+                                                )
+                                            ); ?>
+                                        <?php } else { ?>
+                                            <img height="" width="" src="" alt="">
+                                        <?php } ?>
+                                    </div>
+                                </div><!-- .dokan-feat-image-upload -->
+
+                                <div class="dokan-product-gallery">
+                                    <div class="dokan-side-body" id="dokan-product-images">
+                                        <div id="product_images_container">
+                                            <ul class="product_images dokan-clearfix">
+                                                <?php
+                                                $product_images = get_post_meta( $post_id, '_product_image_gallery', true );
+                                                $gallery = explode( ',', $product_images );
+
+                                                if ( $gallery ) {
+                                                    foreach ($gallery as $image_id) {
+                                                        if ( empty( $image_id ) ) {
+                                                            continue;
+                                                        }
+
+                                                        $attachment_image = wp_get_attachment_image_src( $image_id, 'thumbnail' );
+                                                        ?>
+                                                        <li class="image" data-attachment_id="<?php echo esc_attr( $image_id ); ?>">
+                                                            <img src="<?php echo esc_url( $attachment_image[0] ); ?>" alt="">
+                                                            <a href="#" class="action-delete" title="<?php esc_attr_e( 'Delete image', 'dokan-lite' ); ?>">&times;</a>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                                <li class="add-image add-product-images tips" data-title="<?php esc_html_e( 'Add gallery image', 'dokan-lite' ); ?>">
+                                                    <a href="#" class="add-product-images"><i class="fas fa-plus" aria-hidden="true"></i></a>
+                                                </li>
+                                            </ul>
+
+                                            <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
+                                        </div>
+                                    </div>
+                                </div> <!-- .product-gallery -->
+
+                                <?php do_action( 'dokan_product_gallery_image_count' );?>
+
+                            </div><!-- .content-half-part -->
+
+
+                            <!-- Erro Validação -->
+                            <style>
+                                .dokan-hide-photo
+                                {
+                                    display: none!important;
+                                }
+                            </style>
+                            <div class="dokan-product-photo-alert dokan-hide-photo" id="dokan-focus-photo" style="color: red">
+                                <?php esc_html_e( 'Favor inserir uma foto para este produto!', 'dokan-lite' ); ?>
+                            </div>
+
+                            <!-- Fim Images Upload -->
+
+
+
+
                             <!-- Nome do produto -->
                             <label for="post_title" class="form-label"><?php esc_html_e( 'Nome de seu Produto', 'dokan-lite' ); ?></label>
                             <div class="col-3 input-effect">
@@ -456,7 +547,8 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 
                         <?php do_action( 'dokan_product_edit_after_pricing', $post, $post_id ); ?>
 
-                        <!-- Categoria -->
+
+                        <!-- Categorias -->
                         <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                             <div class="dokan-form-group">
                                 <label for="product_cat" class="form-label"><?php esc_html_e( 'Category', 'dokan-lite' ); ?></label>
@@ -519,7 +611,291 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                                 ?>
                             </div>
                         <?php endif; ?>
-                        <!-- Fim Categoria -->
+                        <!-- Fim Categorias -->
+
+                        <!-- ID da Categoria  -->
+                        <!--                        <p>ID da Categoria: </p>-->
+                        <?php
+                        $terms  =   get_the_terms( $post->ID, 'product_cat' );
+                        $nterms  =  get_the_terms( $post->ID, 'product_tag' );
+
+                        foreach( $terms as $termo )
+                        {
+                            $product_cat_id     =   $termo->term_id;
+                            $product_cat_name   =   $termo->name;
+                        }
+
+                        //                        echo $product_cat_id;
+                        //                        echo '<p>'.$product_cat_name.'</p>';
+                        ?>
+                        <!-- Fim ID da Categoria  -->
+
+
+                        <!-- Custom Field -->
+
+
+
+                        <!--Testando PHP Variation -->
+
+
+
+                        <!--Fim Testando PHP Variation -->
+
+
+
+
+                        <!-- Testando conditional -->
+                        <!--                        <select name="" id="idSelectMain">-->
+                        <!--                            <option value="">Select option</option>-->
+                        <!--                            <option value="personal">Personal</option>-->
+                        <!--                        </select>-->
+                        <!--                        <div id="inputCondition" style="display: none">-->
+                        <!--                            <p>Eu sou um condicional!</p>-->
+                        <!--                        </div>-->
+                        <!-- Testando conditional -->
+
+
+                        <!--
+                         *
+                         * Criando Atributos para produto
+                         * Get attribute id from name
+                         * @function
+                         *
+                          -->
+                        <?php
+                        /**
+                         * @intance WC_Product_Factory class
+                         */
+                        $product_factory    =   new WC_Product_Factory();
+
+                        /**
+                         * Obtendo o id do produto
+                         */
+                        $product_id         =   $product_factory->get_product( $post_id );
+
+                        if ( $product_cat_id === 534 ) {
+
+                            /**
+                             * Criando atributo para objeto
+                             */
+                            $attribute = new WC_Product_Attribute();
+                            // valor para atributo id
+                            $attribute->set_id(0);
+                            // valor para nome do produto slug
+                            $attribute->set_name('Pilates');
+                            // Configurando valores para slug
+                            //Set terms slugs
+                            $attribute->set_options(array(
+                                '',
+                            ));
+                            // position to value blue
+                            $attribute->set_position(0);
+
+                            // If enabled
+                            $attribute->set_visible(1);
+
+                            $product_id->set_attributes(array($attribute));
+
+                            $id = $product_id->save();
+                        }
+                        //                        }elseif ( $product_cat_id === 493 )
+                        //                        {
+                        //                            /**
+                        //                             * Criando atributo para objeto
+                        //                             */
+                        //                            $attribute          =   new WC_Product_Attribute();
+                        //                            // valor para atributo id
+                        //                            $attribute->set_id( 0 );
+                        //                            // valor para nome do produto slug
+                        //                            $attribute->set_name( 'Tamanho de Tela' );
+                        //                            // Configurando valores para slug
+                        //                            //Set terms slugs
+                        //                            $attribute->set_options( array(
+                        //                                '',
+                        //                            ) );
+                        //                            // position to value blue
+                        //                            $attribute->set_position( 0 );
+                        //
+                        //                            // If enabled
+                        //                            $attribute->set_visible( 1 );
+                        //
+                        //                            $product_id->set_attributes( array($attribute) );
+                        //
+                        //                            $id =   $product_id->save();
+                        //                        }else
+                        //                            {
+                        //                                return;
+                        //                            }
+
+
+                        ?>
+                        <!-- Fim criando atributos para produtos por categoria -->
+
+
+
+
+
+
+
+                        <!--                        <label for="tamanho" class="form-label">Conditional Academia e fitness</label>-->
+                        <!--                            <input type="text" id="id_--><?//= $product_cat_id; ?><!--" value="tamanho" class="hide_if_electro_--><?//= $product_cat_id;?><!--">-->
+                        <!---->
+                        <!--                        <input type="text" id="id_--><?//= $product_cat_id; ?><!--" value="tamanho" class="hide_if_electro_--><?//= $product_cat_id; ?><!--">-->
+                        <!--                        --><?php
+                        //                        if ( $product_cat_id === 210 )
+                        //                        {
+                        //                            echo '
+                        //                                <style>
+                        //                                    label[for=new_field_2]
+                        //                                    {
+                        //                                    display: block!important;
+                        //                                    }
+                        //                                </style>
+                        //                            ';
+                        //                        }else
+                        //                            {
+                        //                                echo '
+                        //                                <style>
+                        //                                    label[for=new_field_2]
+                        //                                    {
+                        //                                    display: none!important;
+                        //                                    }
+                        //                                    #new_field_2
+                        //                                    {
+                        //                                    display: none!important;
+                        //                                    }
+                        //                                </style>
+                        //                            ';
+                        //                            }
+                        //
+                        //
+                        //
+                        //                        if ( $product_cat_id === 209 )
+                        //                        {
+                        //                        echo '
+                        //                        <style>
+                        //                            label[for=new_field]
+                        //                            {
+                        //                                display: block!important;
+                        //                            }
+                        //                        </style>
+                        //                        ';
+                        //                        }else
+                        //                        {
+                        //                        echo '
+                        //                        <style>
+                        //                            label[for=new_field]
+                        //                            {
+                        //                                display: none!important;
+                        //                            }
+                        //                            #new_field
+                        //                            {
+                        //                                display: none!important;
+                        //                            }
+                        //                        </style>
+                        //                        ';
+                        //                        }
+                        //
+                        //
+                        //                        if ( $product_cat_id === 540 )
+                        //                        {
+                        //                            echo '
+                        //                        <style>
+                        //                            label[for=new_field_1]
+                        //                            {
+                        //                                display: block!important;
+                        //                            }
+                        //                        </style>
+                        //                        ';
+                        //                        }else
+                        //                        {
+                        //                            echo '
+                        //                        <style>
+                        //                            label[for=new_field_1]
+                        //                            {
+                        //                                display: none!important;
+                        //                            }
+                        //                            #new_field_1
+                        //                            {
+                        //                                display: none!important;
+                        //                            }
+                        //                        </style>
+                        //                        ';
+                        //                        }
+                        //                        ?>
+
+
+<!--                        <label for="" class="form-label">ID das vavriações de produto Variável</label>-->
+                        <?php
+
+                        /**
+                         * Obtendo o ID das variações de um produto variável
+                         */
+                        // declare variable
+                        //echo '<p> ID de meu produto: '.$post_id.'';
+                        //echo '<p> ID da categoria de meu produto: '.$product_cat_id.'';
+
+
+                        $attributes =   $product->get_attributes();
+                        foreach ( $attributes as $attribute )
+                        {
+                            if ( $attribute['is_taxonomy'] )
+                            {
+                                $values =   wc_get_product_terms( $post_id, $attribute['name'], array('fields'=>'names') );
+                            }
+                            //debug
+                            //echo '<pre>',var_dump($attribute),'</pre>';
+                        }
+
+                        ?>
+                        <!--                        <div>debugando</div>-->
+                        <?php
+
+
+
+
+                        //                        echo '<p> Valor do meu atributo: '.implode(',', $values).'</p>';
+                        //echo '<p> Value da options de meu atributo: '.$attribute['name'].'</p>';
+                        //echo '<p> Value do ID de meu atributo: '.$attribute['id'].'</p>';
+
+                        /**
+                         * 'attributes'
+                        'availability_html'
+                        'backorders_allowed'
+                        'dimensions'
+                        'dimensions_html'
+                        'display_price'
+                        'display_regular_price'
+                        'price'
+                        'image'
+                        'image_id'
+                        'is_downloadable'
+                        'is_in_stock'
+                        'is_purchasable'
+                        'is_sold_individually'
+                        'is_virtual'
+                        'max_qty'
+                        'min_qty'
+                        'price_html'
+                        'sku'
+                        'variation_description'
+                        'variation_id'
+                        'variation_is_active'
+                        'variation_is_visible'
+                        'weight'
+                        'weight_html'
+                         */
+
+
+
+                        /***
+                         * Alterando atributos
+                         */
+                        ?>
+
+                        <!-- Fim Custom Field -->
+
+
 
 
 
@@ -533,89 +909,12 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 
                         <!-- Upload Images Teste  -->
 
-                        <!--
-                                                <!-- Fim Upload Images Teste -->
+                        <!-- Fim Upload Images Teste -->
 
 
 
 
-                        <!-- Upload images Images -->
-                        <div class="featured-image">
 
-                            <div class="dokan-feat-image-upload dokan-new-product-featured-img">
-                                <?php
-                                $wrap_class        = ' dokan-hide';
-                                $instruction_class = '';
-                                $feat_image_id     = 0;
-
-                                if ( has_post_thumbnail( $post_id ) ) {
-                                    $wrap_class        = '';
-                                    $instruction_class = ' dokan-hide';
-                                    $feat_image_id     = get_post_thumbnail_id( $post_id );
-                                }
-                                ?>
-
-                                <div class="instruction-inside<?php echo esc_attr( $instruction_class ); ?>">
-
-                                    <input type="hidden" name="feat_image_id" class="dokan-feat-image-id" value="<?php echo esc_attr( $feat_image_id ); ?>">
-
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <a href="#" class="dokan-feat-image-btn btn btn-sm"><?php esc_html_e( 'Upload a product cover image', 'dokan-lite' ); ?></a>
-                                </div>
-
-                                <div class="image-wrap<?php echo esc_attr( $wrap_class ); ?>">
-                                    <a class="close dokan-remove-feat-image" style="line-height: 35%!important;">&times;</a>
-                                    <?php if ( $feat_image_id ) { ?>
-                                        <?php echo get_the_post_thumbnail( $post_id, apply_filters( 'single_product_large_thumbnail_size', 'shop_single' ),
-                                            array(
-                                                'height'    => '',
-                                                'width'     => '',
-                                            )
-                                        ); ?>
-                                    <?php } else { ?>
-                                        <img height="" width="" src="" alt="">
-                                    <?php } ?>
-                                </div>
-                            </div><!-- .dokan-feat-image-upload -->
-
-                            <div class="dokan-product-gallery">
-                                <div class="dokan-side-body" id="dokan-product-images">
-                                    <div id="product_images_container">
-                                        <ul class="product_images dokan-clearfix">
-                                            <?php
-                                            $product_images = get_post_meta( $post_id, '_product_image_gallery', true );
-                                            $gallery = explode( ',', $product_images );
-
-                                            if ( $gallery ) {
-                                                foreach ($gallery as $image_id) {
-                                                    if ( empty( $image_id ) ) {
-                                                        continue;
-                                                    }
-
-                                                    $attachment_image = wp_get_attachment_image_src( $image_id, 'thumbnail' );
-                                                    ?>
-                                                    <li class="image" data-attachment_id="<?php echo esc_attr( $image_id ); ?>">
-                                                        <img src="<?php echo esc_url( $attachment_image[0] ); ?>" alt="">
-                                                        <a href="#" class="action-delete" title="<?php esc_attr_e( 'Delete image', 'dokan-lite' ); ?>">&times;</a>
-                                                    </li>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                            <li class="add-image add-product-images tips" data-title="<?php esc_html_e( 'Add gallery image', 'dokan-lite' ); ?>">
-                                                <a href="#" class="add-product-images"><i class="fas fa-plus" aria-hidden="true"></i></a>
-                                            </li>
-                                        </ul>
-
-                                        <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
-                                    </div>
-                                </div>
-                            </div> <!-- .product-gallery -->
-
-                            <?php do_action( 'dokan_product_gallery_image_count' );?>
-
-                        </div><!-- .content-half-part -->
-                        <!-- Fim Images Upload -->
 
 
 
@@ -623,12 +922,12 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                         <!--                                    <a href="#step3" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-save-attribute">Prosseguir</a>-->
                         <div class="elementor-button-wrapper" style="margin-left: 40%!important; margin-top: 5%!important;">
                             <a href="#step3" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">
-						                    <span class="elementor-button-content-wrapper">
-							                    <span class="elementor-button-icon elementor-align-icon-right">
-				                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
-                                                </span>
-						                    <span class="elementor-button-text">Prosseguir</span>
-		                                    </span>
+                                <span class="elementor-button-content-wrapper">
+                                    <span class="elementor-button-icon elementor-align-icon-right">
+                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="elementor-button-text">Prosseguir</span>
+                                </span>
                             </a>
                         </div>
                         <!-- Fim Botão Prosseguir -->
@@ -644,14 +943,14 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 
 
 
-
+                        <div id="step3"></div>
 
                         <!-- Passo 3: Preço e envío -->
                         <!-- Preços -->
                         <!-- visualizar preços -->
                         <!--                                    <div class="show_if_simple dokan-clearfix show_if_external">-->
                         <!-- Title Passo 3 -->
-                        <h1 class="entry-title" style="margin-top: 20%!important;" id="step3"> Passo 3: Preços e Descrição </h1>
+                        <h1 class="entry-title" style="margin-top: 10%!important;"> Passo 3: Preços e Descrição </h1>
                         <!-- Fim Title Passo 3 -->
                         <div class="hide_if_variable dokan-clearfix">
 
@@ -680,7 +979,7 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                                     </div>
                                 </div>
 
-                                <div class="content-half-part sale-price dokan-edit-row" style="padding: 4% 2% 5% 5%!important;"">
+                                <div class="content-half-part sale-price dokan-edit-row" style="padding: 4% 2% 5% 5%!important;" >
                                 <!-- Preço com Desconto -->
                                 <label for="_sale_price" class="form-label">
                                     <?php esc_html_e( 'Discounted Price', 'dokan-lite' ); ?>
@@ -758,12 +1057,12 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
     <!--                                    <a href="#step3" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-save-attribute">Prosseguir</a>-->
         <div class="elementor-button-wrapper" style="margin-left: 45%!important; margin-top: 5%!important;">
             <a href="#step4" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">
-						                    <span class="elementor-button-content-wrapper">
-							                    <span class="elementor-button-icon elementor-align-icon-right">
-				                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
+                                            <span class="elementor-button-content-wrapper">
+                                                <span class="elementor-button-icon elementor-align-icon-right">
+                                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
                                                 </span>
-						                    <span class="elementor-button-text">Prosseguir</span>
-		                                    </span>
+                                            <span class="elementor-button-text">Prosseguir</span>
+                                            </span>
             </a>
         </div>
 
@@ -771,12 +1070,14 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
     <!-- Fim Botão Prosseguir -->
 
     <!-- Title Passo 4 -->
-        <h1 class="entry-title" style="margin-top:20%!important;" id="step4"> Passo 4: <span class="h4">Estoque, Formas de Envio e Atributos de seu Produto</span> </h1>
+                <div id="step4"></div>
+        <h1 class="entry-title" style="margin-top:10%!important;"> Passo 4: <span class="h4">Estoque, Formas de Envio e Atributos de seu Produto</span> </h1>
         <!-- Fim Title Passo 4 -->
 
-
+    <!-- Hidden fields MiSCapu -->
     <?php do_action( 'dokan_new_product_form', $post, $post_id ); ?>
         <!-- Estoque -->
+                <!-- Hidden fields MiSCapu -->
     <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
         <!-- Fim Estoque -->
 
@@ -910,6 +1211,7 @@ do_action( 'dokan_after_product_content_area' );
  * *****************
  -->
 <?php
+
 function style_miscapu()
 {
     ?>
@@ -1016,17 +1318,19 @@ function style_miscapu()
             background-color: #0e9138!important;
         }
 
-
     </style>
 
 
 
-
-
     <?php
+
 }
 add_action( 'wp_footer', 'style_miscapu' );
 ?>
+
+
+
+
 
 <!-- Scripts MiSCapu -->
 
