@@ -920,16 +920,22 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 
                         <!-- Botão Prosseguir -->
                         <!--                                    <a href="#step3" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-save-attribute">Prosseguir</a>-->
-                        <div class="elementor-button-wrapper" style="margin-left: 40%!important; margin-top: 5%!important;">
-                            <a href="#step3" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">
-                                <span class="elementor-button-content-wrapper">
-                                    <span class="elementor-button-icon elementor-align-icon-right">
-                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
-                                    </span>
-                                    <span class="elementor-button-text">Prosseguir</span>
-                                </span>
-                            </a>
-                        </div>
+<!--                        <div class="elementor-button-wrapper" style="margin-left: 40%!important; margin-top: 5%!important;">-->
+<!--                            <a href="#step3" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">-->
+<!--                                <span class="elementor-button-content-wrapper">-->
+<!--                                    <span class="elementor-button-icon elementor-align-icon-right">-->
+<!--                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>-->
+<!--                                    </span>-->
+<!--                                    <span class="elementor-button-text">Prosseguir</span>-->
+<!--                                </span>-->
+<!--                            </a>-->
+<!--                        </div>-->
+
+
+
+                        <!-- Elementor Botão Prosseguir -->
+                        [elementor-template id="11471"]
+                        <!-- Elementor Botão Prosseguir -->
                         <!-- Fim Botão Prosseguir -->
 
 
@@ -1054,17 +1060,20 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
         </div>
 
     <!-- Botão Prosseguir -->
+                <!--- Prosseguir botão Elementor -->
+                [elementor-template id="11477"]
+                <!--- Fim Prosseguir botão Elementor -->
     <!--                                    <a href="#step3" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-save-attribute">Prosseguir</a>-->
-        <div class="elementor-button-wrapper" style="margin-left: 45%!important; margin-top: 5%!important;">
-            <a href="#step4" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">
-                                            <span class="elementor-button-content-wrapper">
-                                                <span class="elementor-button-icon elementor-align-icon-right">
-                                                        <i aria-hidden="true" class="fas fa-arrow-right"></i>
-                                                </span>
-                                            <span class="elementor-button-text">Prosseguir</span>
-                                            </span>
-            </a>
-        </div>
+<!--        <div class="elementor-button-wrapper" style="margin-left: 45%!important; margin-top: 5%!important;">-->
+<!--            <a href="#step4" class="elementor-button-link elementor-button elementor-size-sm" role="button" style="background-color: #0e9138!important;">-->
+<!--                <span class="elementor-button-content-wrapper">-->
+<!--                    <span class="elementor-button-icon elementor-align-icon-right">-->
+<!--                        <i aria-hidden="true" class="fas fa-arrow-right"></i>-->
+<!--                    </span>-->
+<!--                        <span class="elementor-button-text">Prosseguir</span>-->
+<!--                </span>-->
+<!--            </a>-->
+<!--        </div>-->
 
     <!-- Fim Passo 3 -->
     <!-- Fim Botão Prosseguir -->
@@ -1151,7 +1160,8 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 
         <!--hidden input for Firefox issue-->
     <input type="hidden" name="dokan_update_product" value="<?php esc_attr_e( 'Save Product', 'dokan-lite' ); ?>"/>
-    <input type="submit" name="dokan_update_product" id="publish" class="dokan-btn dokan-btn-theme dokan-btn-lg dokan-right" value="<?php esc_attr_e( 'Save Product', 'dokan-lite' ); ?>"/>
+<!--    <input type="submit" name="dokan_update_product" id="publish" class="dokan-btn dokan-btn-theme dokan-btn-lg dokan-right" value="--><?php //esc_attr_e( 'Save Product', 'dokan-lite' ); ?><!--"/>-->
+                <input type="submit" name="dokan_update_product" id="publish" class="dokan-btn dokan-btn-theme dokan-btn-lg dokan-right" value="<?php esc_attr_e( 'Salvar Produto', 'dokan-lite' ); ?>"/>
     <!--        <div class="dokan-clearfix"></div>-->
         </form>
         <!--
